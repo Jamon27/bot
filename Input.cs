@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using System.Windows.Forms;
 //to do: сделать из этого нормальные класс с конструктором.
 namespace bot
 {
@@ -26,11 +25,8 @@ namespace bot
         public const int MOUSEEVENTF_ABSOLUTE = 0x8000; /* absolute move */
         #endregion
 
-
-
         [DllImport("user32.dll")]
         public static extern void Keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
-
 
         #region Keyboard Fields
         public const int KEYBOARDEVENTF_KEYDOWN = 0x0000; //KeyDown

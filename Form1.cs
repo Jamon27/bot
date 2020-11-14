@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
-
+// Основная рабочая форма. При работе основного кода зависает окно с кнопками и закрыть можно только клавишей стоп.
 namespace bot
 {
     public partial class Form1 : Form
@@ -25,10 +25,7 @@ namespace bot
 
         void Gkh_KeyUp(object sender, KeyEventArgs e)
         {
-
             Thread.Sleep(5000);
-
-
             e.Handled = true;
         }
 
@@ -83,9 +80,6 @@ namespace bot
                         CharachterControl.GetLoot();
                         CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.Escape));
                     }
-
-
-
                 }
             }
             Thread.Sleep(1000);
@@ -213,10 +207,8 @@ namespace bot
             Cv2.CvtColor(res, res, ColorConversionCodes.BGR2GRAY);
 
             #region debug ImShow("res", res)
-
             //Cv2.ImShow("res", res);
             //Cv2.WaitKey(); 
-
             #endregion
             return res;
 
