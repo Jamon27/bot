@@ -45,22 +45,25 @@ namespace bot
 
                 var newCursorPosition = GetBiggestCountourCoordinates(arrayOfCountours);
                 System.Drawing.Rectangle gameWindowCoordinates = NativeMethods.GetAbsoluteClientRect(process[0].MainWindowHandle);
-                Cursor.Position = new System.Drawing.Point(newCursorPosition.X + gameWindowCoordinates.X, newCursorPosition.Y + gameWindowCoordinates.Y);
+                //Cursor.Position = new System.Drawing.Point(newCursorPosition.X + gameWindowCoordinates.X, newCursorPosition.Y + gameWindowCoordinates.Y);
+
+                Input.SmoothMouseMove(newCursorPosition.X + gameWindowCoordinates.X, newCursorPosition.Y + gameWindowCoordinates.Y);
 
                 Thread.Sleep(900);
-                CharachterControl.TryToAttackMob();
+                //CharachterControl.TryToAttackMob();
 
                 //GetCursor.IsCursorRed();
 
-               // if (GetCursor.IsCursorRed())
-              //  {
-              //      CharachterControl.TryToAttackMob();
-              //  }
+                if (GetCursor.IsCursorRed())
+                {
+                    CharachterControl.TryToAttackMob();
+                }
 
                 if (IsMatchWithTemplate(Direct3DCapture.CaptureWindow(process[0].MainWindowHandle), monsterHPBarTempalte))
                 {
                     var k = 0;
                     CharachterControl.AttackMob(1);
+                    CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F1));
                     try
                     {
                         while (IsMatchWithTemplate(Direct3DCapture.CaptureWindow(process[0].MainWindowHandle), monsterHPBarTempalte))
@@ -71,15 +74,46 @@ namespace bot
                             if ((k % 6) == 0)
                             {
                                 CharachterControl.AttackMob(100);
-                                CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F3));
+                                CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F2));
                                 CharachterControl.AttackMob(100);
                             }
+
+                            if ((k % 13) == 0)
+                            {
+                                CharachterControl.AttackMob(100);
+                                CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F1));
+                                CharachterControl.AttackMob(100);
+                            }
+
                         }
                     }
                     finally
                     {
                         CharachterControl.GetLoot();
                         CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.Escape));
+                    }
+
+                    var img11 = BringProcessToFrontAndCaptureWindow(process);
+                    Thread.Sleep(500);
+                    var img22 = BringProcessToFrontAndCaptureWindow(process);
+
+                    var differenceAtImages1 = GetDiffInTwoImagesWithCustomBorders(img11, img22,300,500);
+                    var arrayOfCountours1 = FindCountoursAtImg(differenceAtImages1);
+
+                    var newCursorPosition1 = GetBiggestCountourCoordinates(arrayOfCountours1);
+                    System.Drawing.Rectangle gameWindowCoordinates1 = NativeMethods.GetAbsoluteClientRect(process[0].MainWindowHandle);
+                    //Cursor.Position = new System.Drawing.Point(newCursorPosition.X + gameWindowCoordinates.X, newCursorPosition.Y + gameWindowCoordinates.Y);
+
+                    Input.SmoothMouseMove(newCursorPosition1.X + gameWindowCoordinates.X, newCursorPosition1.Y + gameWindowCoordinates.Y);
+
+                    Thread.Sleep(900);
+                    //CharachterControl.TryToAttackMob();
+
+                    //GetCursor.IsCursorRed();
+
+                    if (GetCursor.IsCursorRed())
+                    {
+                        CharachterControl.TryToAttackMob();
                     }
                 }
             }
@@ -215,6 +249,58 @@ namespace bot
 
 
         }
+
+
+        Mat GetDiffInTwoImagesWithCustomBorders(System.Drawing.Bitmap firstState, System.Drawing.Bitmap secondState, int xBorders, int yBorders)
+        {
+            Mat img1 = firstState.ToMat();
+            Mat img2 = secondState.ToMat();
+            Mat differenceBetweenImages = new Mat();
+            Cv2.Absdiff(img1, img2, differenceBetweenImages);
+
+            // Get the mask if difference greater than threshold
+            Mat mask = new Mat(img1.Size(), MatType.CV_8UC1);
+            int threshold = 70;
+            Vec3b vectorOfColorsDifference;
+            int curDifferenceLvl;
+
+
+            var ab = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+            Parallel.For(xBorders, differenceBetweenImages.Rows - xBorders,
+                   j =>
+                   {
+                       Parallel.For(yBorders, differenceBetweenImages.Cols - yBorders,
+                            i =>
+                            {
+                                vectorOfColorsDifference = differenceBetweenImages.At<Vec3b>(j, i);
+                                curDifferenceLvl = (vectorOfColorsDifference[0] + vectorOfColorsDifference[1] + vectorOfColorsDifference[2]);
+                                if (curDifferenceLvl > threshold)
+                                {
+                                    mask.Set<int>(j, i, 255);
+                                }
+                            });
+                   });
+
+            ab = DateTimeOffset.Now.ToUnixTimeMilliseconds() - ab;
+            //label1.Text = ab.ToString();
+
+            Mat res = new Mat();
+
+            Cv2.BitwiseAnd(img2, img2, res, mask);
+            Cv2.Threshold(res, res, 50, 255, ThresholdTypes.Binary);
+            Cv2.CvtColor(res, res, ColorConversionCodes.BGR2GRAY);
+
+            #region debug ImShow("res", res)
+            //Cv2.ImShow("res", res);
+            //Cv2.WaitKey(); 
+            #endregion
+            return res;
+
+
+        }
+
+
 
         Boolean IsMatchWithTemplate(System.Drawing.Bitmap monsterRef, System.Drawing.Bitmap monsterTemplate)
         {

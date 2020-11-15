@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Windows;
 //to do: сделать из этого нормальные класс с конструктором.
 namespace bot
 {
@@ -32,5 +34,76 @@ namespace bot
         public const int KEYBOARDEVENTF_KEYDOWN = 0x0000; //KeyDown
         public const int KEYBOARDEVENTF_KEYUP = 0x0002; //KeyUp
         #endregion
+
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+
+            public static implicit operator Point(POINT point)
+            {
+                return new Point(point.X, point.Y);
+            }
+        }
+
+        [DllImport("user32.dll")]
+        public static extern bool GetCursorPos(out POINT lpPoint);
+
+        public static Point GetCursorPosition()
+        {
+            POINT lpPoint;
+            GetCursorPos(out lpPoint);
+        
+            return lpPoint;
+        }
+
+        public static void SmoothMouseMove(int aboluteX, int absoluteY)
+        {
+            int currentX = Convert.ToInt32(Input.GetCursorPosition().X);
+            int currentY = Convert.ToInt32(Input.GetCursorPosition().Y);
+
+            while ((currentX != aboluteX) | (currentY != absoluteY))
+            {
+                int xOffset = 0;
+                int yOffset = 0;
+
+                if (currentX != aboluteX)
+                {
+
+                    if (aboluteX - currentX > 0)
+                    {
+                        xOffset = 1;
+                    }
+                    else
+                    {
+                        xOffset = -1;
+                    }
+                }
+
+                if (currentY != absoluteY)
+                {
+
+                    if (absoluteY - currentY > 0)
+                    {
+                        yOffset = 1;
+                    }
+                    else
+                    {
+                        yOffset = -1;
+                    }
+                }
+
+                int aX = currentX + xOffset;
+                int aY = currentY + yOffset;
+                Input.SetCursorPos(aX, aY);
+
+                System.Threading.Thread.Sleep(2);
+
+                currentX = Convert.ToInt32(Input.GetCursorPosition().X);
+                currentY = Convert.ToInt32(Input.GetCursorPosition().Y);
+            }
+        }
     }
 }
