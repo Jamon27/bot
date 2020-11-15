@@ -4,11 +4,11 @@ namespace bot
 {
     class Input
     {
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern void Mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
+        [DllImport("user32.dll")]
+        public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
 
         [DllImport("user32.dll")]
-        static extern bool SetCursorPos(int X, int Y);
+        public static extern bool SetCursorPos(int X, int Y);
 
         #region Mouse Fields 
         public const int MOUSEEVENTF_MOVE = 0x0001; /* mouse move */
@@ -26,7 +26,7 @@ namespace bot
         #endregion
 
         [DllImport("user32.dll")]
-        public static extern void Keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
 
         #region Keyboard Fields
         public const int KEYBOARDEVENTF_KEYDOWN = 0x0000; //KeyDown

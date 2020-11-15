@@ -9,23 +9,23 @@ namespace bot
     {
         public static void TryToAttackMob()
         {
-            AttackMob();
+            Click();
             Thread.Sleep(100); // todo: change to RandomDelay
             PreventFromRunningFarAway();
         }
 
-        static void AttackMob()
+        static void Click()
         {
-            Input.Mouse_event(Input.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-            Input.Mouse_event(Input.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+            Input.mouse_event(Input.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+            Input.mouse_event(Input.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
         }
 
 
         static void PreventFromRunningFarAway() // By pressing "S" button char go back
         {
             for (int i = 0; i<3; i++) { 
-                Input.Keybd_event(Convert.ToByte(Keys.S), 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
-                Input.Keybd_event(Convert.ToByte(Keys.S), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
+                Input.keybd_event(Convert.ToByte(Keys.S), 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
+                Input.keybd_event(Convert.ToByte(Keys.S), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
                 SendKeys.Send("s");
             }
         }
@@ -46,8 +46,8 @@ namespace bot
         {
             for (int j = 0; j < 50; j++)
             {
-                Input.Keybd_event(Convert.ToByte(Keys.X), 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
-                Input.Keybd_event(Convert.ToByte(Keys.X), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
+                Input.keybd_event(Convert.ToByte(Keys.X), 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
+                Input.keybd_event(Convert.ToByte(Keys.X), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
                 Thread.Sleep(100);
             }
         }
@@ -59,14 +59,14 @@ namespace bot
 
         public static void PressKeyBoardButton(byte key)
         {
-            Input.Keybd_event(key, 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
-            Input.Keybd_event(key, 0, Input.KEYBOARDEVENTF_KEYUP, 0);
+            Input.keybd_event(key, 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
+            Input.keybd_event(key, 0, Input.KEYBOARDEVENTF_KEYUP, 0);
         }
         
         public static void PressKeyBoardButton(Keys key)
         {
-            Input.Keybd_event(Convert.ToByte(key), 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
-            Input.Keybd_event(Convert.ToByte(key), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
+            Input.keybd_event(Convert.ToByte(key), 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
+            Input.keybd_event(Convert.ToByte(key), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
         }
 
     }

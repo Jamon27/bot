@@ -17,8 +17,9 @@ namespace bot
         {
             Thread.Sleep(2000);
 
-            var a = new System.Drawing.Bitmap(@"C:\1\curs2.png");
-            var b = new System.Drawing.Bitmap(@"C:\1\curs1.png");
+            //CharachterControl.TryToAttackMob();
+            Input.SetCursorPos(100, 1000);
+            //Input.mouse_event(Input.MOUSEEVENTF_ABSOLUTE | Input.MOUSEEVENTF_MOVE, 2000, 20000, 0, 0);
         }
 
         Boolean IsMatchWithTemplate(System.Drawing.Bitmap monsterRef, System.Drawing.Bitmap monsterTemplate)

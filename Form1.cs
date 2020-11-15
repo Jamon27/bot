@@ -48,13 +48,14 @@ namespace bot
                 Cursor.Position = new System.Drawing.Point(newCursorPosition.X + gameWindowCoordinates.X, newCursorPosition.Y + gameWindowCoordinates.Y);
 
                 Thread.Sleep(900);
+                CharachterControl.TryToAttackMob();
 
-                GetCursor.IsCursorRed();
+                //GetCursor.IsCursorRed();
 
-                if (GetCursor.IsCursorRed())
-                {
-                    CharachterControl.TryToAttackMob();
-                }
+               // if (GetCursor.IsCursorRed())
+              //  {
+              //      CharachterControl.TryToAttackMob();
+              //  }
 
                 if (IsMatchWithTemplate(Direct3DCapture.CaptureWindow(process[0].MainWindowHandle), monsterHPBarTempalte))
                 {
