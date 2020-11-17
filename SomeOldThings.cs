@@ -5,7 +5,7 @@ namespace bot
 {
     class SomeOldThings
     {
-        static void f(Mat result)
+        static void F(Mat result)
         {
             var res = result;
             Cv2.FindContours(res, out OpenCvSharp.Point[][] contours, out HierarchyIndex[] hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
