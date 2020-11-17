@@ -10,7 +10,7 @@ namespace bot
         public static void TryToAttackMob()
         {
             Click();
-            Thread.Sleep(100); // todo: change to RandomDelay
+            RandomDelaySleep(100); // todo: change to RandomDelay
             PreventFromRunningFarAway();
         }
 
@@ -20,8 +20,7 @@ namespace bot
             Input.mouse_event(Input.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
         }
 
-
-        static void PreventFromRunningFarAway() // By pressing "S" button char go back
+        static void PreventFromRunningFarAway() // By pressing "S" button, char go back
         {
             for (int i = 0; i<3; i++) { 
                 Input.keybd_event(Convert.ToByte(Keys.S), 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
@@ -30,16 +29,10 @@ namespace bot
             }
         }
 
-
-        public static void AttackMob(int delay)
+        public static void AttackMobAndWait(int delay)
         {
-            SendKeys.Send("1");
-            Thread.Sleep(delay);
-        }
-
-        public static async void AttackMobAsync(int delay)
-        {
-            await Task.Run(() => AttackMob(delay));
+            SendKeys.Send("1"); // Press "1" - "1" mean attack mob
+            RandomDelaySleep(delay);
         }
 
         public static void GetLoot()
@@ -48,13 +41,8 @@ namespace bot
             {
                 Input.keybd_event(Convert.ToByte(Keys.X), 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
                 Input.keybd_event(Convert.ToByte(Keys.X), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
-                Thread.Sleep(100);
+                RandomDelaySleep(100);
             }
-        }
-
-        public static async void GetLootAsync()
-        {
-            await Task.Run(() => GetLoot());
         }
 
         public static void PressKeyBoardButton(byte key)
@@ -69,5 +57,20 @@ namespace bot
             Input.keybd_event(Convert.ToByte(key), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
         }
 
+        static void RandomDelaySleep(int delayInMilliseconds) // min delay = 5 mSec
+        {
+            if (delayInMilliseconds < 5)
+            {
+                delayInMilliseconds = 5;
+            }
+            
+            int dispersion = 20; // +-20%
+            int percentsFromDelay = delayInMilliseconds / 100 * dispersion;
+
+            var rand = new Random();
+            int randomDelay = rand.Next(-delayInMilliseconds / percentsFromDelay, delayInMilliseconds / percentsFromDelay);
+
+            Thread.Sleep(delayInMilliseconds + randomDelay);
+        }
     }
 }

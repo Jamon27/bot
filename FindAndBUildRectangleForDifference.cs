@@ -9,7 +9,6 @@ namespace bot
             var res = result;
             Cv2.FindContours(res, out OpenCvSharp.Point[][] contours, out HierarchyIndex[] hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
 
-
             int biggestContourNo = 0;
             int ContourLength = 0;
             int count = 0;
@@ -23,7 +22,6 @@ namespace bot
                 }
                 count++;
             }
-
 
             var biggestContourRect = Cv2.BoundingRect(contours[biggestContourNo]);
 

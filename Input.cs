@@ -59,20 +59,20 @@ namespace bot
             return lpPoint;
         }
 
-        public static void SmoothMouseMove(int aboluteX, int absoluteY)
+        public static void SmoothMouseMove(int absoluteX, int absoluteY, int speed)
         {
             int currentX = Convert.ToInt32(Input.GetCursorPosition().X);
             int currentY = Convert.ToInt32(Input.GetCursorPosition().Y);
 
-            while ((currentX != aboluteX) | (currentY != absoluteY))
+            while ((currentX != absoluteX) | (currentY != absoluteY))
             {
                 int xOffset = 0;
                 int yOffset = 0;
 
-                if (currentX != aboluteX)
+                if (currentX != absoluteX)
                 {
 
-                    if (aboluteX - currentX > 0)
+                    if (absoluteX - currentX > 0)
                     {
                         xOffset = 1;
                     }
@@ -99,7 +99,7 @@ namespace bot
                 int aY = currentY + yOffset;
                 Input.SetCursorPos(aX, aY);
 
-                System.Threading.Thread.Sleep(2);
+                System.Threading.Thread.Sleep(speed);
 
                 currentX = Convert.ToInt32(Input.GetCursorPosition().X);
                 currentY = Convert.ToInt32(Input.GetCursorPosition().Y);

@@ -25,6 +25,7 @@ namespace bot
 
         void Gkh_KeyUp(object sender, KeyEventArgs e)
         {
+            Console.WriteLine("Event!");
             Thread.Sleep(5000);
             e.Handled = true;
         }
@@ -39,20 +40,20 @@ namespace bot
                 var img1 = BringProcessToFrontAndCaptureWindow(process);
                 Thread.Sleep(500);
                 var img2 = BringProcessToFrontAndCaptureWindow(process);
-
                 var differenceAtImages = GetDiffInTwoImages(img1, img2);
-                var arrayOfCountours = FindCountoursAtImg(differenceAtImages);
+                var arrayOfCountours = FindCountoursAtImage(differenceAtImages);
 
-                var newCursorPosition = GetBiggestCountourCoordinates(arrayOfCountours);
-                System.Drawing.Rectangle gameWindowCoordinates = NativeMethods.GetAbsoluteClientRect(process[0].MainWindowHandle);
-                //Cursor.Position = new System.Drawing.Point(newCursorPosition.X + gameWindowCoordinates.X, newCursorPosition.Y + gameWindowCoordinates.Y);
+                var coordinatesForNewCursorPosition = GetBiggestCountourCoordinates(arrayOfCountours);
+                var gameWindowCoordinates = NativeMethods.GetAbsoluteClientRect(process[0].MainWindowHandle); // Find offset 
 
-                Input.SmoothMouseMove(newCursorPosition.X + gameWindowCoordinates.X, newCursorPosition.Y + gameWindowCoordinates.Y);
+
+                var x = coordinatesForNewCursorPosition.X + gameWindowCoordinates.X;
+                var y = coordinatesForNewCursorPosition.Y + gameWindowCoordinates.Y;
+                //Cursor.Position = new System.Drawing.Point(x, y);
+                Input.SmoothMouseMove(x, y, 2);
 
                 Thread.Sleep(900);
                 //CharachterControl.TryToAttackMob();
-
-                //GetCursor.IsCursorRed();
 
                 if (GetCursor.IsCursorRed())
                 {
@@ -61,28 +62,28 @@ namespace bot
 
                 if (IsMatchWithTemplate(Direct3DCapture.CaptureWindow(process[0].MainWindowHandle), monsterHPBarTempalte))
                 {
-                    var k = 0;
-                    CharachterControl.AttackMob(1);
+                    var counter = 0;
+                    CharachterControl.AttackMobAndWait(1);
                     CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F1));
                     try
                     {
                         while (IsMatchWithTemplate(Direct3DCapture.CaptureWindow(process[0].MainWindowHandle), monsterHPBarTempalte))
                         {
-                            CharachterControl.AttackMob(1);
+                            CharachterControl.AttackMobAndWait(1);
                             Thread.Sleep(1010);
-                            k++;
-                            if ((k % 6) == 0)
+                            counter++;
+                            if ((counter % 6) == 0)
                             {
-                                CharachterControl.AttackMob(100);
+                                CharachterControl.AttackMobAndWait(100);
                                 CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F2));
-                                CharachterControl.AttackMob(100);
+                                CharachterControl.AttackMobAndWait(100);
                             }
 
-                            if ((k % 13) == 0)
+                            if ((counter % 13) == 0)
                             {
-                                CharachterControl.AttackMob(100);
+                                CharachterControl.AttackMobAndWait(100);
                                 CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F1));
-                                CharachterControl.AttackMob(100);
+                                CharachterControl.AttackMobAndWait(100);
                             }
 
                         }
@@ -93,28 +94,28 @@ namespace bot
                         CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.Escape));
                     }
 
-                    var img11 = BringProcessToFrontAndCaptureWindow(process);
-                    Thread.Sleep(500);
-                    var img22 = BringProcessToFrontAndCaptureWindow(process);
+                    //var img11 = BringProcessToFrontAndCaptureWindow(process);
+                    //Thread.Sleep(500);
+                    //var img22 = BringProcessToFrontAndCaptureWindow(process);
 
-                    var differenceAtImages1 = GetDiffInTwoImagesWithCustomBorders(img11, img22,300,500);
-                    var arrayOfCountours1 = FindCountoursAtImg(differenceAtImages1);
+                    //var differenceAtImages1 = GetDiffInTwoImagesWithCustomBorders(img11, img22,300,500);
+                    //var arrayOfCountours1 = FindCountoursAtImage(differenceAtImages1);
 
-                    var newCursorPosition1 = GetBiggestCountourCoordinates(arrayOfCountours1);
-                    System.Drawing.Rectangle gameWindowCoordinates1 = NativeMethods.GetAbsoluteClientRect(process[0].MainWindowHandle);
-                    //Cursor.Position = new System.Drawing.Point(newCursorPosition.X + gameWindowCoordinates.X, newCursorPosition.Y + gameWindowCoordinates.Y);
+                    //var newCursorPosition1 = GetBiggestCountourCoordinates(arrayOfCountours1);
+                    //System.Drawing.Rectangle gameWindowCoordinates1 = NativeMethods.GetAbsoluteClientRect(process[0].MainWindowHandle);
+                    ////Cursor.Position = new System.Drawing.Point(newCursorPosition.X + gameWindowCoordinates.X, newCursorPosition.Y + gameWindowCoordinates.Y);
 
-                    Input.SmoothMouseMove(newCursorPosition1.X + gameWindowCoordinates.X, newCursorPosition1.Y + gameWindowCoordinates.Y);
+                    //Input.SmoothMouseMove(newCursorPosition1.X + gameWindowCoordinates.X, newCursorPosition1.Y + gameWindowCoordinates.Y, 2);
 
-                    Thread.Sleep(900);
-                    //CharachterControl.TryToAttackMob();
+                    //Thread.Sleep(900);
+                    ////CharachterControl.TryToAttackMob();
 
-                    //GetCursor.IsCursorRed();
+                    ////GetCursor.IsCursorRed();
 
-                    if (GetCursor.IsCursorRed())
-                    {
-                        CharachterControl.TryToAttackMob();
-                    }
+                    //if (GetCursor.IsCursorRed())
+                    //{
+                    //    CharachterControl.TryToAttackMob();
+                    //}
                 }
             }
             Thread.Sleep(1000);
@@ -132,7 +133,6 @@ namespace bot
             #endregion
         }
 
-
         System.Drawing.Bitmap BringProcessToFrontAndCaptureWindow(Process[] process)
         {
             WorkWithProcess.BringProcessWindowToFront(process[0]);
@@ -140,68 +140,7 @@ namespace bot
             return capturedImage;
         }
 
-
-        static void GetDiffAndPrintImg(string mainImage, string templateImage)
-        {
-            Mat img1 = new Mat(mainImage);
-            Mat img2 = new Mat(templateImage);
-            Mat differenceBetweenImages = new Mat();
-            Cv2.Absdiff(img1, img2, differenceBetweenImages);
-
-            // Get the mask if difference greater than threshold
-            Mat mask = new Mat(img1.Size(), MatType.CV_8UC1);
-            int threshold = 80;  // 0
-            Vec3b vectorOfColorsDifference;
-            int curDifferenceLvl;
-
-            for (int j = 0; j < differenceBetweenImages.Rows; ++j)
-            {
-                for (int i = 0; i < differenceBetweenImages.Cols; ++i)
-                {
-                    vectorOfColorsDifference = differenceBetweenImages.At<Vec3b>(j, i);
-                    curDifferenceLvl = (vectorOfColorsDifference[0] + vectorOfColorsDifference[1] + vectorOfColorsDifference[2]);
-                    if (curDifferenceLvl > threshold)
-                    {
-                        mask.Set<int>(j, i, 255);
-                    }
-                }
-            }
-
-
-            Mat res = new Mat();
-
-            Cv2.BitwiseAnd(img2, img2, res, mask);
-            Cv2.Threshold(res, res, 50, 255, ThresholdTypes.Binary);
-            Cv2.CvtColor(res, res, ColorConversionCodes.BGR2GRAY);
-            Cv2.FindContours(res, out OpenCvSharp.Point[][] contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-
-            int biggestContourNo = 0;
-            int ContourLength = 0;
-            for (int i = 0; i < contours[i].Length; i++)
-            {
-                if (ContourLength < contours[i].Length)
-                {
-                    biggestContourNo = i;
-                    ContourLength = contours[i].Length;
-                }
-            }
-
-
-            var biggestContourRect = Cv2.BoundingRect(contours[biggestContourNo]);
-
-            Cv2.CvtColor(res, res, ColorConversionCodes.GRAY2BGR);
-
-            Cv2.Rectangle(res,
-                new OpenCvSharp.Point(biggestContourRect.X - 10, biggestContourRect.Y - 10),
-               new OpenCvSharp.Point(biggestContourRect.X + biggestContourRect.Width + 10, biggestContourRect.Y + biggestContourRect.Height + 10),
-              new Scalar(0, 255, 0), 2);
-
-            //Console.WriteLine(DateTimeOffset.Now.ToUnixTimeMilliseconds());
-            //Cv2.ImShow("res", res);
-            //Cv2.WaitKey();
-        }
-
-        Mat GetDiffInTwoImages(System.Drawing.Bitmap firstState, System.Drawing.Bitmap secondState)
+        OpenCvSharp.Mat GetDiffInTwoImages(System.Drawing.Bitmap firstState, System.Drawing.Bitmap secondState)
         {
             Mat img1 = firstState.ToMat();
             Mat img2 = secondState.ToMat();
@@ -210,12 +149,10 @@ namespace bot
 
             // Get the mask if difference greater than threshold
             Mat mask = new Mat(img1.Size(), MatType.CV_8UC1);
+
             int threshold = 70;
             Vec3b vectorOfColorsDifference;
             int curDifferenceLvl;
-
-
-            var ab = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
             Parallel.For(60, differenceBetweenImages.Rows - 200,
                    j =>
@@ -232,24 +169,30 @@ namespace bot
                             });
                    });
 
-            ab = DateTimeOffset.Now.ToUnixTimeMilliseconds() - ab;
-            //label1.Text = ab.ToString();
 
-            Mat res = new Mat();
+            Mat result = new Mat();
 
-            Cv2.BitwiseAnd(img2, img2, res, mask);
-            Cv2.Threshold(res, res, 50, 255, ThresholdTypes.Binary);
-            Cv2.CvtColor(res, res, ColorConversionCodes.BGR2GRAY);
+            Cv2.BitwiseAnd(img2, img2, result, mask);
+            Cv2.Threshold(result, result, 50, 255, ThresholdTypes.Binary);
+            Cv2.CvtColor(result, result, ColorConversionCodes.BGR2GRAY);
 
             #region debug ImShow("res", res)
             //Cv2.ImShow("res", res);
             //Cv2.WaitKey(); 
             #endregion
-            return res;
-
-
+            return result;
         }
 
+        OpenCvSharp.Point[][] FindCountoursAtImage(Mat image)
+        {
+            Cv2.FindContours(image, out OpenCvSharp.Point[][] contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+            return contours;
+        }
+
+
+
+       
+        
 
         Mat GetDiffInTwoImagesWithCustomBorders(System.Drawing.Bitmap firstState, System.Drawing.Bitmap secondState, int xBorders, int yBorders)
         {
@@ -346,18 +289,7 @@ namespace bot
             }
         }
 
-        static void RandomDelay(int delayInMilliseconds)
-        {
-            if (delayInMilliseconds < 5)
-            {
-                delayInMilliseconds = 5;
-            }
-            var rand = new Random();
-            int percentsFromDelay = delayInMilliseconds / 100 * 20; // +-20%
-            int randomDelay = rand.Next(-delayInMilliseconds / percentsFromDelay, delayInMilliseconds / percentsFromDelay);
 
-            Thread.Sleep(delayInMilliseconds + randomDelay);
-        } // min delay = 5 сломано
 
         static void PressRandomKey()
         {
@@ -366,7 +298,7 @@ namespace bot
             int mistakePercent = 7;
             if (rand.Next(1, 100) <= mistakePercent)
             {
-                RandomDelay(300);
+                //RandomDelay(300);
                 SendKeys.Send(keys[rand.Next(0, keys.Length - 1)]);
             }
         }
@@ -389,11 +321,6 @@ namespace bot
 
 
 
-        OpenCvSharp.Point[][] FindCountoursAtImg(Mat image)
-        {
-            Cv2.FindContours(image, out OpenCvSharp.Point[][] contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-            return contours;
-        }
 
 
 
@@ -422,6 +349,70 @@ namespace bot
             newForm.Show();
         }
 
+
+
+        #region debug functions
+        static void GetDiffAndPrintImg(string mainImage, string templateImage)
+        {
+            Mat img1 = new Mat(mainImage);
+            Mat img2 = new Mat(templateImage);
+            Mat differenceBetweenImages = new Mat();
+            Cv2.Absdiff(img1, img2, differenceBetweenImages);
+
+            // Get the mask if difference greater than threshold
+            Mat mask = new Mat(img1.Size(), MatType.CV_8UC1);
+            int threshold = 80;  // 0
+            Vec3b vectorOfColorsDifference;
+            int curDifferenceLvl;
+
+            for (int j = 0; j < differenceBetweenImages.Rows; ++j)
+            {
+                for (int i = 0; i < differenceBetweenImages.Cols; ++i)
+                {
+                    vectorOfColorsDifference = differenceBetweenImages.At<Vec3b>(j, i);
+                    curDifferenceLvl = (vectorOfColorsDifference[0] + vectorOfColorsDifference[1] + vectorOfColorsDifference[2]);
+                    if (curDifferenceLvl > threshold)
+                    {
+                        mask.Set<int>(j, i, 255);
+                    }
+                }
+            }
+
+
+            Mat res = new Mat();
+
+            Cv2.BitwiseAnd(img2, img2, res, mask);
+            Cv2.Threshold(res, res, 50, 255, ThresholdTypes.Binary);
+            Cv2.CvtColor(res, res, ColorConversionCodes.BGR2GRAY);
+            Cv2.FindContours(res, out OpenCvSharp.Point[][] contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+
+            int biggestContourNo = 0;
+            int ContourLength = 0;
+            for (int i = 0; i < contours[i].Length; i++)
+            {
+                if (ContourLength < contours[i].Length)
+                {
+                    biggestContourNo = i;
+                    ContourLength = contours[i].Length;
+                }
+            }
+
+
+            var biggestContourRect = Cv2.BoundingRect(contours[biggestContourNo]);
+
+            Cv2.CvtColor(res, res, ColorConversionCodes.GRAY2BGR);
+
+            Cv2.Rectangle(res,
+                new OpenCvSharp.Point(biggestContourRect.X - 10, biggestContourRect.Y - 10),
+               new OpenCvSharp.Point(biggestContourRect.X + biggestContourRect.Width + 10, biggestContourRect.Y + biggestContourRect.Height + 10),
+              new Scalar(0, 255, 0), 2);
+            Cv2.ImShow("res", res);
+            Cv2.WaitKey();
+        }
+
+
+
+        #endregion
 
     }
 }

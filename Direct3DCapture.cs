@@ -66,11 +66,9 @@ namespace bot
             {
                 device.GetFrontBufferData(0, surface);
 
-                // Update: thanks digitalutopia1 for pointing out that SlimDX have fixed a bug
                 // where they previously expected a RECT type structure for their Rectangle
                 bitmap = new Bitmap(SlimDX.Direct3D9.Surface.ToStream(surface, SlimDX.Direct3D9.ImageFileFormat.Bmp, new Rectangle(region.Left, region.Top, region.Width, region.Height)));
                 // Previous SlimDX bug workaround: new Rectangle(region.Left, region.Top, region.Right, region.Bottom)));
-
             }
 
             return bitmap;
