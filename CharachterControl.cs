@@ -63,6 +63,11 @@ namespace bot
             {
                 delayInMilliseconds = 5;
             }
+            else
+            {
+                Thread.Sleep(delayInMilliseconds);
+                return;
+            }
             
             int dispersion = 20; // +-20%
             int percentsFromDelay = delayInMilliseconds / 100 * dispersion;

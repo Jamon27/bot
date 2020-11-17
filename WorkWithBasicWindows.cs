@@ -14,8 +14,7 @@ namespace bot
 
         public static System.Drawing.Bitmap PrintWindow(IntPtr hwnd)
         {
-            RECT rc;
-            GetWindowRect(hwnd, out rc);
+            GetWindowRect(hwnd, out RECT rc);
 
             System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(rc.Width, rc.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             System.Drawing.Graphics gfxBmp = System.Drawing.Graphics.FromImage(bmp);
