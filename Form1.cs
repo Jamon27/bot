@@ -29,7 +29,7 @@ namespace bot
         }
 
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             Process[] process = Process.GetProcessesByName("rf_online.bin");
             System.Drawing.Bitmap monsterHPBarTempalte = new System.Drawing.Bitmap(@"C:\1\Template1.png");
@@ -107,7 +107,7 @@ namespace bot
             #endregion
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             var newForm = new Form2();
             newForm.Show();
