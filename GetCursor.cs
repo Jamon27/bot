@@ -29,33 +29,6 @@ namespace bot
             return null;
         }
 
-
-        public static Bitmap CaptureCursor(ref int x, ref int y)
-        {
-            Bitmap bmp;
-            IntPtr hicon;
-            CURSORINFO ci = new CURSORINFO();
-            ci.cbSize = Marshal.SizeOf(ci);
-            if (GetCursorInfo(out ci))
-            {
-                if (ci.flags == CURSOR_SHOWING)
-                {
-                    hicon = CopyIcon(ci.hCursor);
-                    if (GetIconInfo(hicon, out ICONINFO icInfo))
-                    {
-                        x = ci.ptScreenPos.x - ((int)icInfo.xHotspot);
-                        y = ci.ptScreenPos.y - ((int)icInfo.yHotspot);
-
-                        Icon ic = Icon.FromHandle(hicon);
-                        bmp = ic.ToBitmap();
-                        return bmp;
-                    }
-                }
-            }
-
-            return null;
-        }
-
         public static Boolean IsCursorRed()
         {
             var cursorScreenShot = GetCursor.CaptureCursor();
@@ -68,9 +41,7 @@ namespace bot
         }
 
 
-
         #region Class Variables
-
         public const Int32 CURSOR_SHOWING = 0x00000001;
 
         [StructLayout(LayoutKind.Sequential)]
@@ -97,13 +68,10 @@ namespace bot
             public IntPtr hCursor;          // Handle to the cursor. 
             public POINT ptScreenPos;       // A POINT structure that receives the screen coordinates of the cursor. 
         }
-
         #endregion
 
 
         #region Class Functions
-
-
         [DllImport("user32.dll", EntryPoint = "GetCursorInfo")]
         public static extern bool GetCursorInfo(out CURSORINFO pci);
 
@@ -112,8 +80,6 @@ namespace bot
 
         [DllImport("user32.dll", EntryPoint = "GetIconInfo")]
         public static extern bool GetIconInfo(IntPtr hIcon, out ICONINFO piconinfo);
-
-
         #endregion
     }
 }

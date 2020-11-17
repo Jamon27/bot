@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
-//to do: сделать из этого нормальные класс с конструктором.
+
 namespace bot
 {
     class Input
@@ -34,7 +34,6 @@ namespace bot
         public const int KEYBOARDEVENTF_KEYDOWN = 0x0000; //KeyDown
         public const int KEYBOARDEVENTF_KEYUP = 0x0002; //KeyUp
         #endregion
-
 
         [StructLayout(LayoutKind.Sequential)]
         public struct POINT

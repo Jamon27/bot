@@ -44,7 +44,7 @@ namespace bot
                 var arrayOfCountours = FindCountoursAtImage(differenceAtImages);
 
                 var coordinatesForNewCursorPosition = GetBiggestCountourCoordinates(arrayOfCountours);
-                var gameWindowCoordinates = NativeMethods.GetAbsoluteClientRect(process[0].MainWindowHandle); // Find offset 
+                var gameWindowCoordinates = NativeMethodsForDirect3D.GetAbsoluteClientRect(process[0].MainWindowHandle); // Find offset 
 
 
                 var x = coordinatesForNewCursorPosition.X + gameWindowCoordinates.X;
@@ -189,12 +189,7 @@ namespace bot
             return contours;
         }
 
-
-
-       
-        
-
-        Mat GetDiffInTwoImagesWithCustomBorders(System.Drawing.Bitmap firstState, System.Drawing.Bitmap secondState, int xBorders, int yBorders)
+        Mat GetDiffInTwoImagesWithCustomBorders(System.Drawing.Bitmap firstState, System.Drawing.Bitmap secondState, int xBorder, int yBorder)
         {
             Mat img1 = firstState.ToMat();
             Mat img2 = secondState.ToMat();
@@ -207,13 +202,10 @@ namespace bot
             Vec3b vectorOfColorsDifference;
             int curDifferenceLvl;
 
-
-            var ab = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
-            Parallel.For(xBorders, differenceBetweenImages.Rows - xBorders,
+            Parallel.For(xBorder, differenceBetweenImages.Rows - xBorder,
                    j =>
                    {
-                       Parallel.For(yBorders, differenceBetweenImages.Cols - yBorders,
+                       Parallel.For(yBorder, differenceBetweenImages.Cols - yBorder,
                             i =>
                             {
                                 vectorOfColorsDifference = differenceBetweenImages.At<Vec3b>(j, i);
@@ -224,9 +216,6 @@ namespace bot
                                 }
                             });
                    });
-
-            ab = DateTimeOffset.Now.ToUnixTimeMilliseconds() - ab;
-            //label1.Text = ab.ToString();
 
             Mat res = new Mat();
 
@@ -239,11 +228,7 @@ namespace bot
             //Cv2.WaitKey(); 
             #endregion
             return res;
-
-
         }
-
-
 
         Boolean IsMatchWithTemplate(System.Drawing.Bitmap monsterRef, System.Drawing.Bitmap monsterTemplate)
         {
@@ -263,43 +248,11 @@ namespace bot
                 if (maxval >= threshold)
                 {
                     return true;
-
-                    #region Отрисовка найденого сходства (дебажная функция)
-                    /*
-                    //Setup the rectangle to draw
-                    Rect r = new Rect(new Point(maxloc.X, maxloc.Y), new Size(template.Width, template.Height));
-                    Console.WriteLine($"MinVal={minval.ToString()} MaxVal={maxval.ToString()} MinLoc={minloc.ToString()} MaxLoc={maxloc.ToString()} Rect={r.ToString()}");
-                    //Draw a rectangle of the matching area
-                    Cv2.Rectangle(reference, r, Scalar.LimeGreen, 2);
-
-                    //Fill in the result Mat so you don't find the same area again in the MinMaxLoc
-                    //Rect outRect;
-                    //Cv2.FloodFill(result, maxloc, new Scalar(0), out outRect, new Scalar(0.1), new Scalar(1.0), FloodFillFlags.Link4);
-
-                    Cv2.ImShow("Matches", reference);
-                    Cv2.WaitKey();
-                    */
-                    #endregion 
-
                 }
                 else
                 {
                     return false;
                 }
-            }
-        }
-
-
-
-        static void PressRandomKey()
-        {
-            string[] keys = { "-", "=", "d", "q", "e", "x" };
-            var rand = new Random();
-            int mistakePercent = 7;
-            if (rand.Next(1, 100) <= mistakePercent)
-            {
-                //RandomDelay(300);
-                SendKeys.Send(keys[rand.Next(0, keys.Length - 1)]);
             }
         }
 
@@ -318,12 +271,6 @@ namespace bot
             return mobCoordinate;
 
         }
-
-
-
-
-
-
 
         int GetNoOfBiggestContour(OpenCvSharp.Point[][] contours)
         {
@@ -348,71 +295,6 @@ namespace bot
             var newForm = new Form2();
             newForm.Show();
         }
-
-
-
-        #region debug functions
-        static void GetDiffAndPrintImg(string mainImage, string templateImage)
-        {
-            Mat img1 = new Mat(mainImage);
-            Mat img2 = new Mat(templateImage);
-            Mat differenceBetweenImages = new Mat();
-            Cv2.Absdiff(img1, img2, differenceBetweenImages);
-
-            // Get the mask if difference greater than threshold
-            Mat mask = new Mat(img1.Size(), MatType.CV_8UC1);
-            int threshold = 80;  // 0
-            Vec3b vectorOfColorsDifference;
-            int curDifferenceLvl;
-
-            for (int j = 0; j < differenceBetweenImages.Rows; ++j)
-            {
-                for (int i = 0; i < differenceBetweenImages.Cols; ++i)
-                {
-                    vectorOfColorsDifference = differenceBetweenImages.At<Vec3b>(j, i);
-                    curDifferenceLvl = (vectorOfColorsDifference[0] + vectorOfColorsDifference[1] + vectorOfColorsDifference[2]);
-                    if (curDifferenceLvl > threshold)
-                    {
-                        mask.Set<int>(j, i, 255);
-                    }
-                }
-            }
-
-
-            Mat res = new Mat();
-
-            Cv2.BitwiseAnd(img2, img2, res, mask);
-            Cv2.Threshold(res, res, 50, 255, ThresholdTypes.Binary);
-            Cv2.CvtColor(res, res, ColorConversionCodes.BGR2GRAY);
-            Cv2.FindContours(res, out OpenCvSharp.Point[][] contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-
-            int biggestContourNo = 0;
-            int ContourLength = 0;
-            for (int i = 0; i < contours[i].Length; i++)
-            {
-                if (ContourLength < contours[i].Length)
-                {
-                    biggestContourNo = i;
-                    ContourLength = contours[i].Length;
-                }
-            }
-
-
-            var biggestContourRect = Cv2.BoundingRect(contours[biggestContourNo]);
-
-            Cv2.CvtColor(res, res, ColorConversionCodes.GRAY2BGR);
-
-            Cv2.Rectangle(res,
-                new OpenCvSharp.Point(biggestContourRect.X - 10, biggestContourRect.Y - 10),
-               new OpenCvSharp.Point(biggestContourRect.X + biggestContourRect.Width + 10, biggestContourRect.Y + biggestContourRect.Height + 10),
-              new Scalar(0, 255, 0), 2);
-            Cv2.ImShow("res", res);
-            Cv2.WaitKey();
-        }
-
-
-
-        #endregion
 
     }
 }

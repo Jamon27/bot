@@ -16,7 +16,7 @@ namespace bot
         /// <returns></returns>
         public static Bitmap CaptureWindow(IntPtr hWnd)
         {
-            return CaptureRegionDirect3D(hWnd, NativeMethods.GetAbsoluteClientRect(hWnd));
+            return CaptureRegionDirect3D(hWnd, NativeMethodsForDirect3D.GetAbsoluteClientRect(hWnd));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace bot
                 // Setup the device creation parameters
                 SlimDX.Direct3D9.PresentParameters parameters = new SlimDX.Direct3D9.PresentParameters();
                 parameters.BackBufferFormat = adapterInfo.CurrentDisplayMode.Format;
-                Rectangle clientRect = NativeMethods.GetAbsoluteClientRect(hWnd);
+                Rectangle clientRect = NativeMethodsForDirect3D.GetAbsoluteClientRect(hWnd);
                 parameters.BackBufferHeight = clientRect.Height;
                 parameters.BackBufferWidth = clientRect.Width;
                 parameters.Multisample = SlimDX.Direct3D9.MultisampleType.None;

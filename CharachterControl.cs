@@ -10,7 +10,7 @@ namespace bot
         public static void TryToAttackMob()
         {
             Click();
-            RandomDelaySleep(100); // todo: change to RandomDelay
+            RandomDelaySleep(100);
             PreventFromRunningFarAway();
         }
 
@@ -31,7 +31,7 @@ namespace bot
 
         public static void AttackMobAndWait(int delay)
         {
-            SendKeys.Send("1"); // Press "1" - "1" mean attack mob
+            SendKeys.Send("1"); // Press "1". "1" mean attack mob
             RandomDelaySleep(delay);
         }
 
@@ -72,5 +72,19 @@ namespace bot
 
             Thread.Sleep(delayInMilliseconds + randomDelay);
         }
+
+        static void PressRandomKey() // Function was made to prevent clicker detection. Not in use.
+        {
+            string[] keys = { "-", "=", "d", "q", "e", "x" };
+            var rand = new Random();
+            int mistakePercent = 7;
+            if (rand.Next(0, 100) <= mistakePercent)
+            {
+                RandomDelaySleep(300);
+                SendKeys.Send(keys[rand.Next(0, keys.Length - 1)]);
+            }
+        }
+
+
     }
 }
