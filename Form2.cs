@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Threading;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using System.Drawing;
+
 namespace bot
 {
     public partial class Form2 : Form
@@ -17,51 +19,11 @@ namespace bot
         {
             Thread.Sleep(2000);
 
-            //CharachterControl.TryToAttackMob();
-            int x = 0;
-            int y = 1000;
-            int currentX = Convert.ToInt32(Input.GetCursorPosition().X);
-            int currentY = Convert.ToInt32(Input.GetCursorPosition().X);
+            Image a;
 
-            while ((currentX != x) | (currentY != y))  {
-                int xOffset = 0;
-                int yOffset = 0;
+            //Graphics.DrawImage(a,);
+            Bitmap myBitmap = new Bitmap(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures));
 
-                if (currentX != x)
-                {
-                    
-                    if( x - currentX > 0)
-                    {
-                        xOffset = 1;
-                    }
-                    else
-                    {
-                        xOffset = -1;
-                    }
-                }
-
-                if (currentY != y)
-                {
-                    
-                    if (y - currentY > 0)
-                    {
-                        yOffset = 1;
-                    }
-                    else
-                    {
-                        yOffset = -1;
-                    }
-                }
-
-                int aX = currentX + xOffset;
-                int aY = currentY + yOffset;
-                Input.SetCursorPos(aX, aY);
-
-                Thread.Sleep(3);
-
-                currentX = Convert.ToInt32(Input.GetCursorPosition().X);
-                currentY = Convert.ToInt32(Input.GetCursorPosition().Y);
-            }
 
             //Input.mouse_event(Input.MOUSEEVENTF_ABSOLUTE | Input.MOUSEEVENTF_MOVE, 2000, 20000, 0, 0);
         }

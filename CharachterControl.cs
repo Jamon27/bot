@@ -25,13 +25,13 @@ namespace bot
             for (int i = 0; i<3; i++) { 
                 Input.keybd_event(Convert.ToByte(Keys.S), 0, Input.KEYBOARDEVENTF_KEYDOWN, 0);
                 Input.keybd_event(Convert.ToByte(Keys.S), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
-                SendKeys.Send("s");
+                SendKeys.SendWait("s");
             }
         }
 
         public static void AttackMobAndWait(int delay)
         {
-            SendKeys.Send("1"); // Press "1". "1" mean attack mob
+            SendKeys.SendWait("1"); // Press "1". "1" mean attack mob
             RandomDelaySleep(delay);
         }
 
@@ -57,7 +57,7 @@ namespace bot
             Input.keybd_event(Convert.ToByte(key), 0, Input.KEYBOARDEVENTF_KEYUP, 0);
         }
 
-        static void RandomDelaySleep(int delayInMilliseconds) // min delay = 5 mSec
+        static void RandomDelaySleep(float delayInMilliseconds) // min delay = 5 mSec
         {
             if (delayInMilliseconds < 5)
             {
@@ -65,17 +65,19 @@ namespace bot
             }
             else
             {
-                Thread.Sleep(delayInMilliseconds);
+                
+                Thread.Sleep(Convert.ToInt32(delayInMilliseconds));
                 return;
             }
             
-            int dispersion = 20; // +-20%
-            int percentsFromDelay = delayInMilliseconds / 100 * dispersion;
+            float dispersion = 20; // +-20%
+            float percentsFromDelay = delayInMilliseconds / 100 * dispersion;
 
             var rand = new Random();
-            int randomDelay = rand.Next(-delayInMilliseconds / percentsFromDelay, delayInMilliseconds / percentsFromDelay);
+            int randomDelay = rand.Next(-Convert.ToInt32(delayInMilliseconds) / Convert.ToInt32(percentsFromDelay),
+                Convert.ToInt32(delayInMilliseconds) / Convert.ToInt32(percentsFromDelay));
 
-            Thread.Sleep(delayInMilliseconds + randomDelay);
+            Thread.Sleep(Convert.ToInt32(delayInMilliseconds) + Convert.ToInt32(randomDelay));
         }
 
         static void PressRandomKey() // Function was made to prevent clicker detection. Not in use.
