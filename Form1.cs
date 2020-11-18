@@ -69,9 +69,9 @@ namespace bot
                 {
                     Console.WriteLine(i); //WorkWithImages.BringProcessToFrontAndCaptureWindow(process);
                     
-                    var img1 = WorkWithImages.BringProcessToFrontAndCaptureD3DWindow(process);
+                    var img1 = WorkWithImages.BringProcessToFrontAndCaptureGDIWindow(process);
                     Thread.Sleep(500);
-                    var img2 = WorkWithImages.BringProcessToFrontAndCaptureD3DWindow(process);
+                    var img2 = WorkWithImages.BringProcessToFrontAndCaptureGDIWindow(process);
                     var differenceAtImages = WorkWithImages.GetDiffInTwoImages(img1, img2);
                     var arrayOfCountours = WorkWithImages.FindCountoursAtImage(differenceAtImages);
 
