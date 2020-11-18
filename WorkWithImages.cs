@@ -1,5 +1,6 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using ScreenshotCaptureWithMouse.ScreenCapture;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -9,12 +10,20 @@ namespace bot
 {
     class WorkWithImages
     {
-        public static System.Drawing.Bitmap BringProcessToFrontAndCaptureWindow(Process[] process)
+        public static System.Drawing.Bitmap BringProcessToFrontAndCaptureD3DWindow(Process[] process)
         {
             WorkWithProcess.BringProcessWindowToFront(process[0]);
             var capturedImage = Direct3DCapture.CaptureWindow(process[0].MainWindowHandle);
             return capturedImage;
         }
+
+        public static System.Drawing.Bitmap BringProcessToFrontAndCaptureGDIWindow(Process[] process)
+        {
+            WorkWithProcess.BringProcessWindowToFront(process[0]);
+            var capturedImage = CaptureScreen.CaptureWindow(process[0].MainWindowHandle);
+            return capturedImage;
+        }
+
 
         public static OpenCvSharp.Mat GetDiffInTwoImages(System.Drawing.Bitmap firstState, System.Drawing.Bitmap secondState)
         {

@@ -16,15 +16,13 @@ namespace ScreenshotCaptureWithMouse.ScreenCapture
             public int cy;
         }
 
-        static Bitmap CaptureDesktop()
+        public static Bitmap CaptureWindow(IntPtr hWnd)
         {
-
-
             Process[] process = Process.GetProcessesByName("rf_online.bin");
             SIZE size;
             size.cx = 1280;
             size.cy = 800;
-            IntPtr mainWindowHandle = process[0].MainWindowHandle;
+            IntPtr mainWindowHandle = hWnd;
             
             IntPtr hDC = Win32Stuff.GetDC(mainWindowHandle);
             IntPtr hMemDC = GDIStuff.CreateCompatibleDC(hDC);
@@ -48,14 +46,6 @@ namespace ScreenshotCaptureWithMouse.ScreenCapture
                 return bmp;
             }
             return null;   
-        }
-
-        public static Bitmap CaptureDesktopWithCursor()
-        {
-
-            Bitmap desktopBMP;
-              desktopBMP = CaptureDesktop();
-               return desktopBMP;      
         }
 
     }
