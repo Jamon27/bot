@@ -44,7 +44,7 @@ namespace bot
     }
 
     [System.Security.SuppressUnmanagedCodeSecurity()]
-    internal sealed class NativeMethodsForDirect3D
+    internal sealed class NativeMethodsForWindow
     {
         [DllImport("user32.dll")]
         internal static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
@@ -79,8 +79,8 @@ namespace bot
 
         internal static Rectangle GetAbsoluteClientRect(IntPtr hWnd)
         {
-            Rectangle windowRect = NativeMethodsForDirect3D.GetWindowRect(hWnd);
-            Rectangle clientRect = NativeMethodsForDirect3D.GetClientRect(hWnd);
+            Rectangle windowRect = NativeMethodsForWindow.GetWindowRect(hWnd);
+            Rectangle clientRect = NativeMethodsForWindow.GetClientRect(hWnd);
 
             // This gives us the width of the left, right and bottom chrome - we can then determine the top height
             int chromeWidth = (int)((windowRect.Width - clientRect.Width) / 2);

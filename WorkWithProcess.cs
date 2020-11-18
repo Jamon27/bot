@@ -13,7 +13,7 @@ namespace bot
             IntPtr handle = proc.MainWindowHandle;
             int i = 0;
 
-            while (!NativeMethodsForDirect3D.IsWindowInForeground(handle))
+            while (!NativeMethodsForWindow.IsWindowInForeground(handle))
             {
                 if (i == 0)
                 {
@@ -21,20 +21,20 @@ namespace bot
                     Thread.Sleep(1);
                 }
 
-                if (NativeMethodsForDirect3D.IsIconic(handle))
+                if (NativeMethodsForWindow.IsIconic(handle))
                 {
                     // Minimized so send restore
-                    NativeMethodsForDirect3D.ShowWindow(handle, NativeMethodsForDirect3D.WindowShowStyle.Restore);
+                    NativeMethodsForWindow.ShowWindow(handle, NativeMethodsForWindow.WindowShowStyle.Restore);
                 }
                 else
                 {
                     // Already Maximized or Restored so just bring to front
-                    NativeMethodsForDirect3D.SetForegroundWindow(handle);
+                    NativeMethodsForWindow.SetForegroundWindow(handle);
                 }
                 Thread.Sleep(1);
 
                 // Check if the target process main window is now in the foreground
-                if (NativeMethodsForDirect3D.IsWindowInForeground(handle))
+                if (NativeMethodsForWindow.IsWindowInForeground(handle))
                 {
                     // Leave enough time for screen to redraw
                     Thread.Sleep(5);

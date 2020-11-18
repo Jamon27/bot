@@ -76,7 +76,7 @@ namespace bot
                     var arrayOfCountours = WorkWithImages.FindCountoursAtImage(differenceAtImages);
 
                     var coordinatesForNewCursorPosition = WorkWithImages.GetBiggestCountourCoordinates(arrayOfCountours);
-                    var gameWindowCoordinates = NativeMethodsForDirect3D.GetAbsoluteClientRect(process[0].MainWindowHandle); // Find offset 
+                    var gameWindowCoordinates = NativeMethodsForWindow.GetAbsoluteClientRect(process[0].MainWindowHandle); // Find offset 
                     
                     var x = coordinatesForNewCursorPosition.X + gameWindowCoordinates.X;
                     var y = coordinatesForNewCursorPosition.Y + gameWindowCoordinates.Y;
