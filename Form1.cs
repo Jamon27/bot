@@ -59,7 +59,7 @@ namespace bot
                 {
                                    
                     var img1 = WorkWithImages.BringProcessToFrontAndCaptureGDIWindow(process);
-                    Thread.Sleep(500);
+                    Thread.Sleep(500); // Wait 0.5 sec to let mobs go to differnet place
                     var img2 = WorkWithImages.BringProcessToFrontAndCaptureGDIWindow(process);
                     
                     var differenceAtImages = WorkWithImages.GetDiffInTwoImages(img1, img2);
@@ -67,7 +67,7 @@ namespace bot
                     var arrayOfCountours = WorkWithImages.FindCountoursAtImage(differenceAtImages);
                     
                     var coordinatesForNewCursorPosition = WorkWithImages.GetBiggestCountourCoordinates(arrayOfCountours);
-                    var gameWindowCoordinates = NativeMethodsForWindow.GetAbsoluteClientRect(process[0].MainWindowHandle); // Find offset 
+                    var gameWindowCoordinates = NativeMethodsForWindow.GetAbsoluteClientRect(process[0].MainWindowHandle); // Find offset of the game dow
                     
                     var x = coordinatesForNewCursorPosition.X + gameWindowCoordinates.X;
                     var y = coordinatesForNewCursorPosition.Y + gameWindowCoordinates.Y;
@@ -75,8 +75,7 @@ namespace bot
                     //Cursor.Position = new System.Drawing.Point(x, y);
                     Input.SmoothMouseMove(x, y, 0);
                     
-                    Thread.Sleep(900);
-                    
+                    Thread.Sleep(900); // Waiting 'till cursor became red         
                     if (GetCursor.IsCursorRed())
                     {
                         CharachterControl.TryToAttackMob();

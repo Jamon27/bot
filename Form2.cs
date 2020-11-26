@@ -6,6 +6,8 @@ using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.Drawing;
 
+// THIS FORM MADE FOR DEBBUGING ONLY
+
 namespace bot
 {
     public partial class Form2 : Form
