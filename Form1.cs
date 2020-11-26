@@ -13,7 +13,8 @@ namespace bot
         {
             InitializeComponent();
         }
-        private void Form1_Load(object sender, EventArgs e)
+
+        private void Form1_Load(object sender, EventArgs e) // Not in use
         {
             GlobalKeyboardHook globalKeyboardHook = new GlobalKeyboardHook();
             globalKeyboardHook.HookedKeys.Add(Keys.A);
@@ -21,7 +22,7 @@ namespace bot
             globalKeyboardHook.KeyUp += new KeyEventHandler(Gkh_KeyUp);
         }
 
-        void Gkh_KeyUp(object sender, KeyEventArgs e)
+        void Gkh_KeyUp(object sender, KeyEventArgs e) // Not in use
         {
             Console.WriteLine("Event!");
             Thread.Sleep(5000);
@@ -46,37 +47,20 @@ namespace bot
             #endregion
         }
 
-        async void testFunction2()
-        {
-            await Task.Run(() =>
-            {
-                Console.WriteLine("in");
-                 while (true)
-                {
-                    
-                }
-                Console.WriteLine("out");
-            });
-        }
         async void testFunction()
         {
             await Task.Run(() =>
             {
                 Process[] process = Process.GetProcessesByName("rf_online.bin");
-                
-                System.Drawing.Bitmap monsterHPBarTempalte = new System.Drawing.Bitmap(@"C:\1\Template1.png");
+                Console.WriteLine(Environment.CurrentDirectory);
+
+                System.Drawing.Bitmap monsterHPBarTempalte = new System.Drawing.Bitmap(@"..\..\..\Images\templateOfHealthBar.png");
                 for (int i = 0; i < 100000; i++)
                 {
-                    Console.WriteLine(i); //WorkWithImages.BringProcessToFrontAndCaptureWindow(process);
-                    
+                                   
                     var img1 = WorkWithImages.BringProcessToFrontAndCaptureGDIWindow(process);
                     Thread.Sleep(500);
                     var img2 = WorkWithImages.BringProcessToFrontAndCaptureGDIWindow(process);
-
-
-                    //System.Drawing.Bitmap img1 = new System.Drawing.Bitmap(@"C:\1\w1.JPG");
-                    //System.Drawing.Bitmap img2 = new System.Drawing.Bitmap(@"C:\1\w2.JPG");
-
                     
                     var differenceAtImages = WorkWithImages.GetDiffInTwoImages(img1, img2);
                     
@@ -87,11 +71,11 @@ namespace bot
                     
                     var x = coordinatesForNewCursorPosition.X + gameWindowCoordinates.X;
                     var y = coordinatesForNewCursorPosition.Y + gameWindowCoordinates.Y;
+                    
                     //Cursor.Position = new System.Drawing.Point(x, y);
-                    Input.SmoothMouseMove(x, y, 1);
+                    Input.SmoothMouseMove(x, y, 0);
                     
                     Thread.Sleep(900);
-                    //CharachterControl.TryToAttackMob();
                     
                     if (GetCursor.IsCursorRed())
                     {
@@ -102,7 +86,7 @@ namespace bot
                     {
                         var counter = 0;
                         CharachterControl.AttackMobAndWait(1);
-                        CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F1));
+                        CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F1)); // Press F1 to buff
                         try
                         {
                             while (WorkWithImages.IsImageMatchWithTemplate(Direct3DCapture.CaptureWindow(process[0].MainWindowHandle), monsterHPBarTempalte))
@@ -113,14 +97,14 @@ namespace bot
                                 if ((counter % 6) == 0)
                                 {
                                     CharachterControl.AttackMobAndWait(100);
-                                    CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F2));
+                                    CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F2)); // Press F2 to use skills
                                     CharachterControl.AttackMobAndWait(100);
                                 }
 
                                 if ((counter % 13) == 0)
                                 {
                                     CharachterControl.AttackMobAndWait(100);
-                                    CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F1));
+                                    CharachterControl.PressKeyBoardButton(Convert.ToByte(Keys.F1)); // Press F1 to buff
                                     CharachterControl.AttackMobAndWait(100);
                                 }
 
