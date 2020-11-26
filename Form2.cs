@@ -21,6 +21,13 @@ namespace bot
 
             Image a;
 
+            var b = Process.GetCurrentProcess().Threads;
+
+            foreach (var item in b)
+            {
+                
+            }
+
             //Graphics.DrawImage(a,);
             Bitmap myBitmap = new Bitmap(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures));
 

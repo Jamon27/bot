@@ -72,16 +72,23 @@ namespace bot
                     var img1 = WorkWithImages.BringProcessToFrontAndCaptureGDIWindow(process);
                     Thread.Sleep(500);
                     var img2 = WorkWithImages.BringProcessToFrontAndCaptureGDIWindow(process);
-                    var differenceAtImages = WorkWithImages.GetDiffInTwoImages(img1, img2);
-                    var arrayOfCountours = WorkWithImages.FindCountoursAtImage(differenceAtImages);
 
+
+                    //System.Drawing.Bitmap img1 = new System.Drawing.Bitmap(@"C:\1\w1.JPG");
+                    //System.Drawing.Bitmap img2 = new System.Drawing.Bitmap(@"C:\1\w2.JPG");
+
+                    
+                    var differenceAtImages = WorkWithImages.GetDiffInTwoImages(img1, img2);
+                    
+                    var arrayOfCountours = WorkWithImages.FindCountoursAtImage(differenceAtImages);
+                    
                     var coordinatesForNewCursorPosition = WorkWithImages.GetBiggestCountourCoordinates(arrayOfCountours);
                     var gameWindowCoordinates = NativeMethodsForWindow.GetAbsoluteClientRect(process[0].MainWindowHandle); // Find offset 
                     
                     var x = coordinatesForNewCursorPosition.X + gameWindowCoordinates.X;
                     var y = coordinatesForNewCursorPosition.Y + gameWindowCoordinates.Y;
                     //Cursor.Position = new System.Drawing.Point(x, y);
-                    Input.SmoothMouseMove(x, y, 0);
+                    Input.SmoothMouseMove(x, y, 1);
                     
                     Thread.Sleep(900);
                     //CharachterControl.TryToAttackMob();
@@ -90,7 +97,7 @@ namespace bot
                     {
                         CharachterControl.TryToAttackMob();
                     }
-
+                    
                     if (WorkWithImages.IsImageMatchWithTemplate(Direct3DCapture.CaptureWindow(process[0].MainWindowHandle), monsterHPBarTempalte))
                     {
                         var counter = 0;
@@ -127,7 +134,7 @@ namespace bot
                     }
                 }
             }
-            );
+           );
         }
 
 

@@ -27,6 +27,7 @@ namespace bot
 
         public static OpenCvSharp.Mat GetDiffInTwoImages(System.Drawing.Bitmap firstState, System.Drawing.Bitmap secondState)
         {
+
             Mat img1 = firstState.ToMat();
             Mat img2 = secondState.ToMat();
             Mat differenceBetweenImages = new Mat();
@@ -38,7 +39,7 @@ namespace bot
             int threshold = 70;
             Vec3b vectorOfColorsDifference;
             int curDifferenceLvl;
-
+            /*
             Parallel.For(60, differenceBetweenImages.Rows - 200,
                    j =>
                    {
@@ -52,7 +53,7 @@ namespace bot
                                     mask.Set<int>(j, i, 255);
                                 }
                             });
-                   });
+                   });*/
 
 
             Mat result = new Mat();
@@ -60,7 +61,7 @@ namespace bot
             Cv2.BitwiseAnd(img2, img2, result, mask);
             Cv2.Threshold(result, result, 50, 255, ThresholdTypes.Binary);
             Cv2.CvtColor(result, result, ColorConversionCodes.BGR2GRAY);
-
+            //GC.Collect();
             #region debug ImShow("res", res)
             //Cv2.ImShow("res", res);
             //Cv2.WaitKey(); 
